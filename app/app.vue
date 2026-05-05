@@ -43,6 +43,21 @@ async function addInstrument(){
   }
 }
 
+async function deleteInstrument(id){
+  const confirmDelete = confirm("Are you sure you want to delete?");
+  if(!confirmDelete) return;
+  const {error} = await supabase
+    .from('instruments')
+    .delete()
+    .eq('id', id)
+
+    if(!error){
+      getInstruments();
+    } else{
+      console.log(error)
+    }
+}
+
 function editInstrument(item){
   form.value.name = item.name;
   isEditMode.value = true;
@@ -64,6 +79,7 @@ onMounted(() => {
   <ul>
     <li v-for="instrument in instruments" :key="instrument.id">{{ instrument.name }}
       <button @click="editInstrument(instrument)">Edit</button>
+      <button @click="deleteInstrument(instrument.id)">Delete</button>
     </li>
     
   </ul>
